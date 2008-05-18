@@ -35,16 +35,19 @@
 #                                      makefiles
 
 
-# This makefile just defines the test sources which comprise this component, and
+# This makefile just defines the sources which comprise this component, and
 # the library that should be built from them.
 #
 # All of the real work is then done via the common makefile 'GNUcommon', but
 # with the 'extra_includes' variable used to specify any include paths that are
 # external to this component.
 
-library := snm_test_debug.a
-sources := snm_test_debug_asserts.c snm_test_debug_debugs.c
+library := snm_test.a
+sources := snm_test.c
 
-extra_includes := ../../types/inc ../../debug/inc ../../test/inc
+extra_includes := ../snm_types/inc          \
+                  ../snm_debug/inc          \
+                  ../snm_types/test/inc     \
+                  ../snm_debug/test/inc
 
-include ../../GNUcommon
+include ../GNUcommon

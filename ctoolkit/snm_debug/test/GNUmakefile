@@ -42,9 +42,11 @@
 # with the 'extra_includes' variable used to specify any include paths that are
 # external to this component.
 
-library := snm_test_types.a
-sources := snm_test_types_limits.c snm_test_types_misc.c snm_test_types_sizes.c
+library := snm_test_debug.a
+sources := snm_test_debug_asserts.c snm_test_debug_debugs.c
 
-extra_includes := ../../types/inc ../../debug/inc ../../test/inc
+extra_includes := ../../snm_types/inc   \
+                  ../../snm_debug/inc   \
+                  ../../snm_test/inc
 
 include ../../GNUcommon

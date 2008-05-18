@@ -42,9 +42,9 @@
 # with the 'extra_includes' variable used to specify any include paths that are
 # external to this component.
 
-library := snm_test.a
-sources := snm_test.c
+library := snm_debug.a
+sources := snm_debug.c
 
-extra_includes := ../types/inc ../debug/inc ../types/test/inc ../debug/test/inc
+extra_includes := ../snm_types/inc
 
 include ../GNUcommon

@@ -58,8 +58,8 @@
 #                 +src/         directory containing source files (*.c)
 
 # Specify what components and tests to build
-components	:= types debug
-tests		:= $(addsuffix /test,$(components)) test
+components	:= snm_types snm_debug
+tests		:= $(addsuffix /test,$(components)) snm_test
 
 # Default target; build all components and tests (using recursive make)
 .PHONY: all
@@ -87,8 +87,8 @@ $(tests):
 	$(MAKE) --directory=$@ $(MAKECMDGOALS)
 
 # Link the tests into a test harness
-run_all_tests: test/snm_test.a debug/snm_debug.a \
-               types/test/snm_test_types.a debug/test/snm_test_debug.a
+run_all_tests: snm_test/snm_test.a snm_debug/snm_debug.a \
+               snm_types/test/snm_test_types.a snm_debug/test/snm_test_debug.a
 	$(CC) $(LDFLAGS) $? $(LOADLIBES) $(LDLIBS) -o $@
 
 # Use recursive make to lint each component

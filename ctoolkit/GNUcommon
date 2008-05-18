@@ -46,7 +46,12 @@
 # All of the real work is then done via this common makefile, including building
 # the component sources into a library, and cleaning the component.
 
-CFLAGS      += -std=iso9899:1999 -ggdb -pedantic-errors -Wall
+# Use standard C99
+#CFLAGS      += -std=iso9899:1999 -ggdb -pedantic-errors -Wall
+
+# Use standard C99 with GNU extensions (Max OS X requires this) 
+CFLAGS      += -std=gnu99 -ggdb -pedantic-errors -Wall
+
 CPPFLAGS    += $(addprefix -I,inc $(extra_includes))
 LINTFLAGS   += -D__STDC_VERSION__=199901L
 
