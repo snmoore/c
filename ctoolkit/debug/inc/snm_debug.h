@@ -35,11 +35,15 @@
  * Date     Bug#    Author              Description
  * -----------------------------------------------------------------------------
  * 20050202 2       simon@snmoore.net   Add initial debug support
+ * 20051128 6       simon@snmoore.net   Use hard limit for output buffer size
  */
 
 
 /* No check for circular includes here - may be parsed many times */
 
+
+/* Set a limit for the size of output buffers */
+#define SNM_DEBUG_BUFFER_SIZE (255)
 
 /*
  * Macros to enable or disable asserts and debugging

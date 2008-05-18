@@ -35,6 +35,7 @@
  * Date     Bug#    Author              Description
  * -----------------------------------------------------------------------------
  * 20050202 2       simon@snmoore.net   Add initial debug support
+ * 20051128 6       simon@snmoore.net   Use hard limit for output buffer size
  */
 
 
@@ -48,10 +49,9 @@
 /* Local includes */
 #include "snm_types.h"          /* For uint32_t */
 
-/* Set a limit for the size of output buffers
- * If this is changed, you must update test snm_test_debug_asserts_9
- */
-#define SNM_DEBUG_BUFFER_SIZE (255)
+/* Asserts and debugging */
+#define SNM_DEBUG (SNM_DEBUG_CRITICAL)
+#include "snm_debug.h"
 
 /* Called for an assert: write an output message and then abort */
 #if __STDC_VERSION__ == 199901L

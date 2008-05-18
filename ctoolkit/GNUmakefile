@@ -33,6 +33,7 @@
 # ------------------------------------------------------------------------------
 # 20050305 3       simon@snmoore.net   Arrange directory structure and configure
 #                                      makefiles
+# 20060518 7       simon@snmoore.net   Lint all components	       
 
 
 # This is the top-level makefile that is used for all build targets, including:
@@ -40,6 +41,7 @@
 #   all     compile all components and tests    e.g. 'gmake'
 #   clean   clean all components and tests      e.g. 'gmake clean'
 #   check   run the test harness                e.g. 'gmake && gmake check'
+#   lint    lint all components                 e.g. 'gmake lint'
 #
 # It uses a recursive makefile approach to process each component, which also
 # makes use of a common makefile 'GNUcommon'. This is dependent upon the
@@ -88,3 +90,8 @@ $(tests):
 run_all_tests: test/snm_test.a debug/snm_debug.a \
                types/test/snm_test_types.a debug/test/snm_test_debug.a
 	$(CC) $(LDFLAGS) $? $(LOADLIBES) $(LDLIBS) -o $@
+
+# Use recursive make to lint each component
+.PHONY: lint
+lint: $(components)
+	$(MAKE) --directory=$< $(MAKECMDGOALS)

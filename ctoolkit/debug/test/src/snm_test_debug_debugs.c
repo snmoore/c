@@ -37,6 +37,7 @@
  * 20050203 2       simon@snmoore.net   Add initial debug support
  * 20050408 5       simon@snmoore.net   Do not overflow buffer for test with
  *                                      maximal length string when in C90 mode
+ * 20051128 6       simon@snmoore.net   Use hard limit for output buffer size
  */
 
 
@@ -58,9 +59,6 @@
 /* Asserts and debugging */
 #define SNM_ASSERT (SNM_ASSERT_ENABLED)
 #include "snm_debug.h"
-
-/* Size should correlate with snm_debug.c */
-#define SNM_DEBUG_BUFFER_SIZE (255)
 
 /* Global text array, used for snm_test_debug_debugs_16 */
 char Text[SNM_DEBUG_BUFFER_SIZE];
@@ -148,7 +146,7 @@ SNM_TEST_RESULT snm_test_debug_quiet_debug(void(*Function)(void),
             }
 
             /* Read debug text (if any) from the pipe */
-            String = fgets(Buffer, 255, Read);
+            String = fgets(Buffer, SNM_DEBUG_BUFFER_SIZE, Read);
 
             /* Wait for the child process to terminate */
             wait(&Status);

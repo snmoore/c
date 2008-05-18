@@ -33,6 +33,7 @@
 # ------------------------------------------------------------------------------
 # 20050305 3       simon@snmoore.net   Arrange directory structure and configure
 #                                      makefiles
+# 20060518 7       simon@snmoore.net   Lint all components
 
 
 # This is the common makefile that is used to build all components.
@@ -45,8 +46,9 @@
 # All of the real work is then done via this common makefile, including building
 # the component sources into a library, and cleaning the component.
 
-CFLAGS      += -std=iso9899:1990 -ggdb -pedantic-errors -Wall
+CFLAGS      += -std=iso9899:1999 -ggdb -pedantic-errors -Wall
 CPPFLAGS    += $(addprefix -I,inc $(extra_includes))
+LINTFLAGS   += -D__STDC_VERSION__=199901L
 
 objects     := $(subst .c,.o,$(sources))
 
@@ -59,6 +61,12 @@ all: $(library)
 .PHONY: clean
 clean:
 	$(RM) $(library) $(objects)
+
+.PHONY: lint
+lint: $(sources)
+	for file in $?; do \
+		$(LINT) $(CPPFLAGS) $(LINTFLAGS) $$file; \
+	done
 
 $(library): $(objects)
 	$(AR) $(ARFLAGS) $@ $^
