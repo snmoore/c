@@ -1,0 +1,26 @@
+/* No multiple include protection - this file is parsed multiple times */
+
+/* States */
+STATE(State1)
+    TRANSITION(Event1)
+    TRANSITION(Event3)
+STATE_END
+    
+STATE(State2)
+    TRANSITION(Event2)
+STATE_END
+
+STATE(State3)
+STATE_END
+
+STATE(State4)
+STATE_END
+
+/* Events */
+EVENT(Event1)
+
+EVENT(Event2)
+
+EVENT(Event3)
+
+EVENT(Event4)
