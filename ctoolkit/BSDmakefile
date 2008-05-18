@@ -1,0 +1,112 @@
+# Copyright (c) 2004, Simon Moore (simon@snmoore.net)
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#  Redistributions of source code must retain the above copyright notice, this
+#  list of conditions and the following disclaimer.
+#
+#  Redistributions in binary form must reproduce the above copyright notice,
+#  this list of conditions and the following disclaimer in the documentation
+#  and/or other materials provided with the distribution.
+#
+#  Neither the name of Simon Moore, snmoore.net nor the names of its
+#  contributors may be used to endorse or promote products derived from this
+#  software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+# History
+#
+# Date     Bug#    Author              Description
+# ------------------------------------------------------------------------------
+# 20050130 1       simon@snmoore.net   Add initial types support
+# 20050202 2       simon@snmoore.net   Add initial debug support
+# 20050227 3       simon@snmoore.net   Arrange directory structure and configure
+#                                      makefiles
+
+
+# Do not inherit the shell from the environment (recommended by GNU)
+SHELL=		/bin/sh
+
+# Set the suffix list explicitly (recommended by GNU)
+.SUFFIXES:
+.SUFFIXES:	.c .o
+
+# Common directories
+DIR_INCLUDE=	$(.CURDIR)/include
+DIR_SOURCE=	$(.CURDIR)/source
+DIR_OBJ=	$(.CURDIR)/obj
+
+# Common compiler configuration
+CC=		gcc
+CFLAGS+=	-pedantic-errors -Wall
+CFLAGS+=	-I$(DIR_INCLUDE)
+CFLAGS+=	-ggdb
+#CFLAGS+=        -ansi
+#CFLAGS+=        -std=iso9899:1990
+CFLAGS+=        -std=iso9899:1999
+
+# Sources for the test target
+OBJ_TEST=	snm_test.o	                \
+		snm_test_types_misc.o           \
+		snm_test_types_sizes.o          \
+		snm_test_types_limits.o         \
+		snm_debug.o                     \
+		snm_test_debug_asserts.o        \
+		snm_test_debug_debugs.o 
+
+# Sources for the loc target
+OBJ_LOC=	loc1.o	        \
+		loc2.o   \
+		loc3.o   \
+		loc4.o   \
+		loc5.o
+
+# Build everything
+all: clean test loc
+
+# Generate a directory in which to build
+#  Ideally should use .OBJDIR, but this requires DIR_OBJ to exist prior to make,
+#  hence we create DIR_OBJ if necessary and then have to manually specify DIR_OBJ
+#  in targets when building from *.c to *.o
+.PHONY: directories
+directories:
+	@if [ ! -d $(DIR_OBJ) ]; then mkdir $(DIR_OBJ); fi	
+
+# Clean the build directory
+clean:
+	@if [ -d $(DIR_OBJ) ]; then rm -R $(DIR_OBJ); fi
+
+# Set the search path
+#  Unfortunately .PATH.o does not seem to work, and neither does VPATH for
+#  for objects, hence we have to manually specify DIR_OBJ in targets for
+#  *.o > executable
+.PATH.c: $(DIR_SOURCE)
+
+# Specify common build rules because we cannot rely upon .OBJDIR
+.c.o: directories
+	$(CC) -c -o $(DIR_OBJ)/$@ $< $(CFLAGS)
+
+# Create the test harness
+test: $(OBJ_TEST)
+	$(CC) -o $(DIR_OBJ)/$@ $(?:%=$(DIR_OBJ)/%)
+
+# Create the lines-of-code examples
+loc: $(OBJ_LOC)
+	$(CC) -o $(DIR_OBJ)/loc1 $(DIR_OBJ)/loc1.o
+	$(CC) -o $(DIR_OBJ)/loc2 $(DIR_OBJ)/loc2.o
+	$(CC) -o $(DIR_OBJ)/loc3 $(DIR_OBJ)/loc3.o
+	$(CC) -o $(DIR_OBJ)/loc4 $(DIR_OBJ)/loc4.o
+	$(CC) -o $(DIR_OBJ)/loc5 $(DIR_OBJ)/loc5.o
